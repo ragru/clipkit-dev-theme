@@ -10,7 +10,7 @@ const config = {
   outputDir: "../dest",
 };
 
-const ignoredFiles = ["**/.DS_Store"];
+const ignoredFiles = ["**/.DS_Store", "**/.keep"];
 
 function ensureDirectoryExistence(filePath) {
   const dirname = path.dirname(filePath);
