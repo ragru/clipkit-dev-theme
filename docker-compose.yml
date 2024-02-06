@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    #image: 740658765198.dkr.ecr.ap-northeast-1.amazonaws.com/clipkit:latest
+    image: clipkit
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/clipkit/dev-theme/src
+      - ./dest:/clipkit/dev-theme/dest
+      - ./node:/clipkit/dev-theme/node
+    command: >
+      sh -c "rm -f /clipkit/tmp/pids/server.pid &&
+             . /etc/profile.d/anyenv.sh &&
+             cd /clipkit/dev-theme/node && npm install &&
+             cd /clipkit && bundle exec foreman start"
