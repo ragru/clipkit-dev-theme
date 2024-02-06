@@ -44,7 +44,7 @@ htto://localhost:3000/ でアクセスできます。
 ESBuildでビルドされたファイルです。src/を更新するとリアルタイムにビルドされます。
 これをzip圧縮するとテーマファイルになります。
 
-- node
+- node/
   - esbuild.js
   - package.json
 
