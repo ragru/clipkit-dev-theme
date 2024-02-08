@@ -45,7 +45,7 @@ RUN mkdir /root/.ssh && \
     echo "${SSH_PRIVATE_KEY}" > /root/.ssh/id_rsa && \
     chmod 600 /root/.ssh/id_rsa && \
     ssh-keyscan github.com >> /root/.ssh/known_hosts && \
-    git clone -b feature/v12.13.1/dev-theme git@github.com:bitarts/clipkit.git /clipkit && \
+    git clone -b master git@github.com:bitarts/clipkit.git /clipkit && \
     rm -rf /root/.ssh
 
 RUN echo "local all all trust" > /etc/postgresql/14/main/pg_hba.conf && \
@@ -88,8 +88,8 @@ RUN service postgresql start && \
     bin/rails assets:precompile webpacker:compile && \
     service postgresql stop
 
-RUN echo "web: RAILS_SERVE_STATIC_FILES=true bin/rails server -b 0.0.0.0 -p 3000" > Procfile && \
-    echo "dev_theme: bin/rails runner 'DevThemeListener.new(path: \"./dev-theme/dest\").start'" >> Procfile && \
+RUN echo "web: RAILS_SERVE_STATIC_FILES=true WAIT_FOR_DATABASE=true bin/rails server -b 0.0.0.0 -p 3000" > Procfile && \
+    echo "dev_theme: WAIT_FOR_DATABASE=true bin/rails runner 'DevThemeListener.new(path: \"./dev-theme/dest\").start'" >> Procfile && \
     echo "esbuild: cd dev-theme/node && node esbuild.js" >> Procfile && \
     echo "postgres: sudo -u postgres /usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf" >> Procfile
 
