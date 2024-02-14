@@ -88,5 +88,5 @@ function processFile(srcFilePath) {
 
 findFiles(config.entryDir).forEach(processFile);
 
-const watcher = chokidar.watch(config.entryDir, { ignored: ignoredFiles });
+const watcher = chokidar.watch(config.entryDir, { ignored: ignoredFiles, usePolling: true });
 watcher.on("add", processFile).on("change", processFile);
