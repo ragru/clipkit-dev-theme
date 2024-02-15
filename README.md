@@ -9,7 +9,7 @@ Clipkitのテーマをオフラインで開発できる環境です。管理画�
 - [AWS CLI](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/getting-started-install.html)
 - [Docker](https://www.docker.com/ja-jp/products/docker-desktop/)
 
-### 2. Dockerイメージ取得（初回のみ）
+### 2. コンテナリポジトリ認証
 
 アクセスキーとシークレットは別途お伝えします。
 
@@ -19,11 +19,13 @@ $ export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 $ aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 740658765198.dkr.ecr.ap-northeast-1.amazonaws.com
 ```
 
-### 3. 開発環境を起動
+### 3. Dockerイメージ取得とコンテナ起動
 
 ```shell
 $ docker compose up
 ```
+
+初回はDockerイメージのダウンロードのため少し時間がかかります
 
 http://localhost:3000/ でアクセスできます。
 
