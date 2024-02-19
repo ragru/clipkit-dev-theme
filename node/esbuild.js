@@ -71,7 +71,7 @@ function processFile(srcFilePath) {
       );
   } else if (srcFilePath.endsWith(".scss")) {
     try {
-      compileSass(srcFilePath, outFilePath.replace(/\.scss$/, ".css"));
+      compileSass(srcFilePath, outFilePath.replace(/\.scss$/, ".scss"));
       console.log(`Compiled: ${srcFilePath}`);
     } catch (error) {
       console.error(`Error during compiling ${srcFilePath}:`, error);
