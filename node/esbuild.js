@@ -58,6 +58,8 @@ function processFile(srcFilePath) {
     return;
   }
 
+  ensureDirectoryExistence(outFilePath);
+
   if (srcFilePath.endsWith(".js")) {
     esbuild
       .build({
