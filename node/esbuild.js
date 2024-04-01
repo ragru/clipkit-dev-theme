@@ -39,6 +39,41 @@ function copyFile(src, dest) {
   fs.copyFileSync(src, dest);
 }
 
+function preprocessSassFile(srcPath) {
+  let content = fs.readFileSync(srcPath, "utf8");
+  content = content
+    .replace(/{%(.+?)%}/g, "LIQUIDOPEN-$1-LIQUIDCLOSE")
+    .replace(/{{(.+?)}}/g, "LIQUIDVAROPEN-$1-LIQUIDVARCLOSE");
+  return content;
+}
+
+function postprocessCssContent(cssContent) {
+  cssContent = cssContent
+    .replace(/LIQUIDOPEN-(.+?)-LIQUIDCLOSE/g, "{%$1%}")
+    .replace(/LIQUIDVAROPEN-(.+?)-LIQUIDVARCLOSE/g, "{{$1}}");
+  return cssContent;
+}
+
+function compileSassWithLiquid(srcPath, destPath) {
+  const preprocessedContent = preprocessSassFile(srcPath);
+  const tempFilePath = path.join(
+    path.dirname(srcPath),
+    "temp_" + path.basename(srcPath)
+  );
+  fs.writeFileSync(tempFilePath, preprocessedContent);
+
+  try {
+    const result = sass.compile(tempFilePath, {
+      loadPaths: [path.dirname(srcPath)],
+    });
+    let cssContent = result.css.toString();
+    cssContent = postprocessCssContent(cssContent);
+    fs.writeFileSync(destPath, cssContent);
+  } finally {
+    fs.unlinkSync(tempFilePath);
+  }
+}
+
 function compileSass(src, dest) {
   const result = sass.compile(src, { loadPaths: [path.dirname(src)] });
   fs.writeFileSync(dest, result.css);
@@ -73,7 +108,10 @@ function processFile(srcFilePath) {
       );
   } else if (srcFilePath.endsWith(".scss")) {
     try {
-      compileSass(srcFilePath, outFilePath.replace(/\.scss$/, ".scss"));
+      compileSassWithLiquid(
+        srcFilePath,
+        outFilePath.replace(/\.scss$/, ".scss")
+      );
       console.log(`Compiled: ${srcFilePath}`);
     } catch (error) {
       console.error(`Error during compiling ${srcFilePath}:`, error);
