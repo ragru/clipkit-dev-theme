@@ -74,11 +74,6 @@ function compileSassWithLiquid(srcPath, destPath) {
   }
 }
 
-function compileSass(src, dest) {
-  const result = sass.compile(src, { loadPaths: [path.dirname(src)] });
-  fs.writeFileSync(dest, result.css);
-}
-
 function getOutputFilePath(srcFilePath) {
   const relativePath = path.relative(config.entryDir, srcFilePath);
   return path.join(config.outputDir, relativePath);
@@ -110,7 +105,7 @@ function processFile(srcFilePath) {
     try {
       compileSassWithLiquid(
         srcFilePath,
-        outFilePath.replace(/\.scss$/, ".scss")
+        outFilePath.replace(/\.scss$/, ".css.liquid")
       );
       console.log(`Compiled: ${srcFilePath}`);
     } catch (error) {
